@@ -1,0 +1,63 @@
+# Used to keep things simple when working locally on development
+# applies all k8s yaml config files when skaffold starts
+# applies all k8s yaml config files every time we make a change
+# deletes all pods/services when shutting down skaffold
+
+apiVersion: skaffold/v2alpha3
+kind: Config
+deploy: 
+    kubectl:
+        manifests:
+            -   ./infra/k8s/*
+build:
+    local: 
+        push: false
+    artifacts:
+        -   image: docker387/client
+            context: client
+            docker:
+                dockerfile: Dockerfile
+            sync:
+                manual:
+                    -   src: 'src/**/*.js'
+                        dest: .
+        -   image: docker387/comments
+            context: comments
+            docker:
+                dockerfile: Dockerfile
+            sync:
+                manual:
+                    -   src: '*.js'
+                        dest: .
+        -   image: docker387/event-bus
+            context: event-bus
+            docker:
+                dockerfile: Dockerfile
+            sync:
+                manual:
+                    -   src: '*.js'
+                        dest: .
+        -   image: docker387/moderation
+            context: moderation
+            docker:
+                dockerfile: Dockerfile
+            sync:
+                manual:
+                    -   src: '*.js'
+                        dest: .
+        -   image: docker387/posts
+            context: posts
+            docker:
+                dockerfile: Dockerfile
+            sync:
+                manual:
+                    -   src: '*.js'
+                        dest: .
+        -   image: docker387/query
+            context: query
+            docker:
+                dockerfile: Dockerfile
+            sync:
+                manual:
+                    -   src: '*.js'
+                        dest: .
